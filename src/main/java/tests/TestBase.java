@@ -1,7 +1,7 @@
 package tests;
 
 import io.restassured.RestAssured;
-import org.junit.BeforeClass;
+import org.testng.annotations.BeforeClass;
 import testframework.HelperManager;
 
 import java.io.File;
