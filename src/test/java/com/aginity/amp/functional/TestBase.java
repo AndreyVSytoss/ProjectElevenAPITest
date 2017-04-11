@@ -1,6 +1,7 @@
-package tests;
+package com.aginity.amp.functional;
 
 import io.restassured.RestAssured;
+
 import org.testng.annotations.BeforeClass;
 import testframework.HelperManager;
 

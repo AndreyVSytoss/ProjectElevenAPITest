@@ -18,9 +18,8 @@ public class AccountHelper extends BaseHelper {
                 .get(manager.getProperty("userPath") + userName)
                 .then()
                 .statusCode(200)
-                .log().body()
                 .assertThat()
-                .body(matchesJsonSchema(new File (System.getProperty("user.dir") + File.separator + "user-schema.json")))
+                .body(matchesJsonSchema(new File (JSON_SCHEMA_PATH + "user-schema.json")))
                 .extract()
                 .as(User.class);
     }

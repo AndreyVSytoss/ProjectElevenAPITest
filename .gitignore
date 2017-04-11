@@ -1,0 +1,20 @@
+tmp/
+
+# maven
+target/
+*.class
+
+# idea
+.idea/
+*.ipr
+*.iml
+out/
+build/
+
+# eclipse
+.settings/
+.classpath
+.project
+
+# ignore all log files produced by tests
+*.log
