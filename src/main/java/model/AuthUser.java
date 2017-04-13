@@ -3,16 +3,16 @@ package model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AuthRequest {
-    private String login;
+public class AuthUser {
+    private String username;
     private String password;
 
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
-    public AuthRequest setLogin(String login) {
-        this.login = login;
+    public AuthUser setUsername(String username) {
+        this.username = username;
         return this;
     }
 
@@ -20,7 +20,7 @@ public class AuthRequest {
         return password;
     }
 
-    public AuthRequest setPassword(String password) {
+    public AuthUser setPassword(String password) {
         this.password = password;
         return this;
     }

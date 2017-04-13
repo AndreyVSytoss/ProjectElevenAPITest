@@ -8,5 +8,6 @@ public class BaseHelper {
             + "main" + File.separator + "java" + File.separator + "jsonScheme" + File.separator;
 
     protected HelperManager manager;
+
     public BaseHelper(HelperManager manager) {this.manager = manager;}
 }
