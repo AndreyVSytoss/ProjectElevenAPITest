@@ -18,26 +18,26 @@ public class AuthenticationServiceHelper extends BaseHelper {
     public String getJWTtoken(AuthUser auth) {
         return
                 given()
-                        .log().all()
                         .contentType("application/json")
                         .body(auth)
                         .when()
                         .post(manager.getProperty("authLogin"))
                         .then()
-                        .log().all()
                         .statusCode(200)
+                        .log().ifValidationFails()
                         .extract().body().asString();
     }
 
-    public AuthCreateUserResponse createValidAuthUser(AuthUser auth) {
+    public AuthCreateUserResponse createValidAuthUser(AuthUser auth, String token) {
         return
                 given()
                         .contentType("application/json")
+                        .header("Authorization", "Bearer " + token)
                         .body(auth)
                         .when()
                         .post(manager.getProperty("authCreateUserPath"))
                         .then()
-                        .log().all()
+                        .log().ifValidationFails()
                         .statusCode(201)
                         .extract().as(AuthCreateUserResponse.class);
     }
