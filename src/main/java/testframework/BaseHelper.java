@@ -1,6 +1,7 @@
 package testframework;
 
 import java.io.File;
+import java.util.Random;
 
 public class BaseHelper {
 
@@ -10,4 +11,9 @@ public class BaseHelper {
     protected HelperManager manager;
 
     public BaseHelper(HelperManager manager) {this.manager = manager;}
+
+    public static String generateRandomString() {
+        Random rnd = new Random();
+        return "test" + rnd.nextInt();
+    }
 }

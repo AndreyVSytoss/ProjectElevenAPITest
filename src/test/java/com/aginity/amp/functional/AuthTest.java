@@ -30,11 +30,4 @@ public class AuthTest extends TestBase{
         assertThat(response.getUsername()).isEqualTo(request.getUsername());
         assertThat(response.getId()).isNotEmpty();
     }
-
-    @Test
-    public void checkId(){
-        AuthUser request = manager.getAuthenticationServiceHelper().generateAuthUser();
-        String id = manager.getAuthenticationServiceHelper().createUserAndGetId(request);
-        assertThat(id).isNotEmpty();
-    }
 }

@@ -4,7 +4,6 @@ import java.util.Properties;
 
 public class HelperManager {
     private Properties properties;
-    private AccountHelper accountHelper;
     private UserServiceHelper userServiceHelper;
     private AuthenticationServiceHelper authenticationService;
 
@@ -15,13 +14,6 @@ public class HelperManager {
 
     public String getProperty(String key) {
         return properties.getProperty(key);
-    }
-
-    public AccountHelper getAccountHelper() {
-        if (accountHelper == null) {
-            accountHelper = new AccountHelper(this);
-        }
-        return accountHelper;
     }
 
     public UserServiceHelper getUserServiceHelper() {

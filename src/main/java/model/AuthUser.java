@@ -1,27 +1,41 @@
 package model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.annotation.Generated;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class AuthUser {
-    private String username;
-    private String password;
+@Generated("com.robohorse.robopojogenerator")
+public class AuthUser{
 
-    public String getUsername() {
-        return username;
-    }
+	@JsonProperty("password")
+	private String password;
 
-    public AuthUser setUsername(String username) {
-        this.username = username;
-        return this;
-    }
+	@JsonProperty("username")
+	private String username;
 
-    public String getPassword() {
-        return password;
-    }
+	public AuthUser setPassword(String password){
+		this.password = password;
+		return this;
+	}
 
-    public AuthUser setPassword(String password) {
-        this.password = password;
-        return this;
-    }
+	public String getPassword(){
+		return password;
+	}
+
+	public AuthUser setUsername(String username){
+		this.username = username;
+		return this;
+	}
+
+	public String getUsername(){
+		return username;
+	}
+
+	@Override
+ 	public String toString(){
+		return 
+			"AuthUser{" + 
+			"password = '" + password + '\'' + 
+			",username = '" + username + '\'' + 
+			"}";
+		}
 }

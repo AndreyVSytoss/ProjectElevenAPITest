@@ -1,14 +1,8 @@
 package testframework;
 
-import io.restassured.RestAssured;
-import io.restassured.config.SSLConfig;
 import model.AuthCreateUserResponse;
 import model.AuthUser;
 
-import javax.security.cert.Certificate;
-import java.util.Random;
-
-import static io.restassured.RestAssured.certificate;
 import static io.restassured.RestAssured.given;
 
 
@@ -18,6 +12,7 @@ public class AuthenticationServiceHelper extends BaseHelper {
     public String getJWTtoken(AuthUser auth) {
         return
                 given()
+                        .log().all()
                         .contentType("application/json")
                         .body(auth)
                         .when()
@@ -31,6 +26,7 @@ public class AuthenticationServiceHelper extends BaseHelper {
     public AuthCreateUserResponse createValidAuthUser(AuthUser auth, String token) {
         return
                 given()
+                        .log().all()
                         .contentType("application/json")
                         .header("Authorization", "Bearer " + token)
                         .body(auth)
@@ -42,10 +38,11 @@ public class AuthenticationServiceHelper extends BaseHelper {
                         .extract().as(AuthCreateUserResponse.class);
     }
 
-    public String createUserAndGetId(AuthUser auth) {
+    public String createUserAndGetId(AuthUser auth, String token) {
         return
                 given()
                         .contentType("application/json")
+                        .header("Authorization", "Bearer " + token)
                         .body(auth)
                         .when()
                         .post(manager.getProperty("authCreateUserPath"))
@@ -63,8 +60,5 @@ public class AuthenticationServiceHelper extends BaseHelper {
                 .setPassword(generateRandomString());
     }
 
-    private static String generateRandomString() {
-        Random rnd = new Random();
-            return "test" + rnd.nextInt();
-        }
+
 }
