@@ -1,10 +1,7 @@
 package testframework;
 
-import model.RolesItem;
+import io.restassured.response.Response;
 import model.User;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
@@ -12,18 +9,17 @@ public class UserServiceHelper extends BaseHelper{
 
     public UserServiceHelper(HelperManager manager) {super(manager);}
 
-    public List<User> getAllUsers(String token) {
+    public Response getAllUsers(String token) {
              return given()
                         .log().all()
                         .when()
                         .header("Authorization", "Bearer " + token)
                         .get(manager.getProperty("userPath"))
                         .then()
-                        .statusCode(200)
-                        .extract().body().as(List.class);
+                        .extract().response();
     }
 
-    public User createUser(User createUserRequest, String token) {
+    public Response createUser(User createUserRequest, String token) {
         return given()
                 .log().all()
                 .contentType("application/json")
@@ -32,23 +28,34 @@ public class UserServiceHelper extends BaseHelper{
                 .when()
                 .post(manager.getProperty("userPath"))
                 .then()
-                .log().all()
-                .statusCode(200)
-                .extract().body().as(User.class);
+                .extract().response();
     }
+
+    public Response updateUser(User user, String id, String token) {
+        return given()
+                .log().all()
+                .contentType("application/json")
+                .body(user)
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .patch(manager.getProperty("userPath") + id)
+                .then()
+                .extract().response();
+    }
+
+
+
+
 
     /*----------------------------------------------------------------------------------------------*/
 
-    private static List<RolesItem> rolesItems = Arrays.asList(new RolesItem()
-                    .setId("3b83146d-dc59-45f5-9556-58a35e5ddab1").setName("Admin"),
-            new RolesItem()
-                    .setId("477f7269-6054-4e87-9b42-306c715e97e9").setName("User"));
 
-    public User generateUserData(String id){
+
+    public User generateUserData(String id, String userName){
         return new User()
                 .setId(id)
                 .setEmail(generateRandomString())
-                .setUsername(generateRandomString())
+                .setUsername(userName)
                 .setOrganization(generateRandomString())
                 .setFullName(generateRandomString() + " " + generateRandomString())
                 .setRoles(rolesItems);

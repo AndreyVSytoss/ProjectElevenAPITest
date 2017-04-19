@@ -1,5 +1,6 @@
 package testframework;
 
+import io.restassured.response.Response;
 import model.AuthCreateUserResponse;
 import model.AuthUser;
 
@@ -9,7 +10,7 @@ import static io.restassured.RestAssured.given;
 public class AuthenticationServiceHelper extends BaseHelper {
     public AuthenticationServiceHelper(HelperManager manager) {super(manager);}
 
-    public String getJWTtoken(AuthUser auth) {
+    public Response getJWTtoken(AuthUser auth) {
         return
                 given()
                         .log().all()
@@ -18,12 +19,10 @@ public class AuthenticationServiceHelper extends BaseHelper {
                         .when()
                         .post(manager.getProperty("authLogin"))
                         .then()
-                        .statusCode(200)
-                        .log().ifValidationFails()
-                        .extract().body().asString();
+                        .extract().response();
     }
 
-    public AuthCreateUserResponse createValidAuthUser(AuthUser auth, String token) {
+    public Response createAuthUser(AuthUser auth, String token) {
         return
                 given()
                         .log().all()
@@ -33,24 +32,11 @@ public class AuthenticationServiceHelper extends BaseHelper {
                         .when()
                         .post(manager.getProperty("authCreateUserPath"))
                         .then()
-                        .log().ifValidationFails()
-                        .statusCode(201)
-                        .extract().as(AuthCreateUserResponse.class);
+                        .extract().response();
     }
 
-    public String createUserAndGetId(AuthUser auth, String token) {
-        return
-                given()
-                        .contentType("application/json")
-                        .header("Authorization", "Bearer " + token)
-                        .body(auth)
-                        .when()
-                        .post(manager.getProperty("authCreateUserPath"))
-                        .then()
-                        .log().all()
-                        .statusCode(201)
-                        .extract().body().jsonPath().getString("id");
-    }
+
+
 
     //**************************************************************************//
 

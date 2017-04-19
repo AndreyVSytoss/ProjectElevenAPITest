@@ -1,46 +1,79 @@
 package com.aginity.amp.functional;
 
+import model.AuthCreateUserResponse;
 import model.AuthUser;
 import model.User;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import io.restassured.response.Response;
+
+import java.lang.reflect.Array;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserServiceTest extends TestBase{
+    private String token;
+
+    @BeforeClass
+        private void getToken() {
+        AuthUser tokenRequest = new AuthUser().setUsername("admin").setPassword("admin");
+        token = manager.getAuthenticationServiceHelper().getJWTtoken(tokenRequest).getBody().asString();
+    }
+
+
     @Test
     public void getUsers(){
 
         /* get user token */
         AuthUser tokenRequest = new AuthUser().setUsername("user").setPassword("user");
-        String token = manager.getAuthenticationServiceHelper().getJWTtoken(tokenRequest);
+        String userToken = manager.getAuthenticationServiceHelper().getJWTtoken(tokenRequest).getBody().asString();
 
         /* get all users */
-        List<User> response = manager.getUserServiceHelper().getAllUsers(token);
+        Response actual = manager.getUserServiceHelper().getAllUsers(userToken);
 
-        assertThat(response).extracting("full_name").contains("Admin Admin", "User User");
+        assertThat(actual.getStatusCode()).isEqualTo(200);
+        assertThat(actual.as(List.class)).extracting("full_name").contains("Admin Admin", "User User");
     }
 
     @Test
     public void createRandomUser(){
 
-        /* get user token */
-        AuthUser tokenRequest = new AuthUser().setUsername("admin").setPassword("admin");
-        String token = manager.getAuthenticationServiceHelper().getJWTtoken(tokenRequest);
+        /* create auth user */
+
+        AuthUser authUserRequest = manager.getAuthenticationServiceHelper().generateAuthUser();
+        AuthCreateUserResponse newAuthUser = manager.getAuthenticationServiceHelper().createAuthUser(authUserRequest, token).as(AuthCreateUserResponse.class);
+
+        /* create random user */
+
+        User expected = manager.getUserServiceHelper().generateUserData(newAuthUser.getId(), newAuthUser.getUsername());
+        Response actual = manager.getUserServiceHelper().createUser(expected, token);
+
+        assertThat(actual.getStatusCode()).isEqualTo(201);
+        assertThat(actual.as(User.class)).isEqualTo(expected);
+    }
+
+    @Test
+    public void updateUser(){
 
         /* create auth user */
 
         AuthUser authUserRequest = manager.getAuthenticationServiceHelper().generateAuthUser();
-        String id = manager.getAuthenticationServiceHelper().createUserAndGetId(authUserRequest, token);
+        AuthCreateUserResponse newAuthUser = manager.getAuthenticationServiceHelper().createAuthUser(authUserRequest, token).as(AuthCreateUserResponse.class);
 
         /* create random user */
 
-        User expected = manager.getUserServiceHelper().generateUserData(id);
-        User actual = manager.getUserServiceHelper().createUser(expected, token);
-        System.out.println(actual);
+        User oldUser = manager.getUserServiceHelper().generateUserData(newAuthUser.getId(), newAuthUser.getUsername());
+        Response oldUserResp = manager.getUserServiceHelper().createUser(oldUser, token);
 
-        //assertThat(response).extracting("full_name").contains("Admin Admin", "User User");
+        /* update 'Organization' and 'Email' fields */
+
+        User updatedUser = new User().setOrganization("test_organization").setEmail("test_email");
+        User expected = oldUser.setOrganization("test_organization").setEmail("test_email");
+        Response actual = manager.getUserServiceHelper().updateUser(updatedUser, oldUser.getId(), token);
+
+        assertThat(actual.getStatusCode()).isEqualTo(200);
+        assertThat(actual.as(User.class)).isEqualTo(expected);
     }
-
 }
