@@ -29,20 +29,6 @@ public class BaseHelper {
         return "test" + rnd.nextInt();
     }
 
-    public List<RolesItem> getRolesItems(String name) {
-        return rolesItems.stream().filter(roles -> roles.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
-    }
-
-    public String getRoleId(String name) {
-        String role = "";
-        for (RolesItem r : rolesItems) {
-            if (name.equalsIgnoreCase(r.getName())) {
-                role = r.getId();
-            }
-        }
-        return role;
-    }
-
     public String getJsonSchemaPath() {
         return JSON_SCHEMA_PATH;
     }

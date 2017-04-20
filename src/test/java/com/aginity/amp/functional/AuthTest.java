@@ -3,17 +3,26 @@ package com.aginity.amp.functional;
 import io.restassured.response.Response;
 import model.AuthCreateUserResponse;
 import model.AuthUser;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import testframework.AuthenticationServiceHelper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class AuthTest extends TestBase{
 
+    private AuthenticationServiceHelper authHelper;
+
+    @BeforeClass
+    private void initHelpers() {
+        authHelper = manager.getAuthenticationServiceHelper();
+    }
+
     @Test
     public void getAuthTokenTest(){
         AuthUser request = new AuthUser().setUsername("user").setPassword("user");
-        Response response = manager.getAuthenticationServiceHelper().getJWTtoken(request);
+        Response response = authHelper.getJWTtoken(request);
         String token = response.getBody().asString();
 
         assertThat(response.statusCode()).isEqualTo(200);
@@ -25,11 +34,11 @@ public class AuthTest extends TestBase{
 
         /* get admin token */
         AuthUser tokenRequest = new AuthUser().setUsername("admin").setPassword("admin");
-        String token = manager.getAuthenticationServiceHelper().getJWTtoken(tokenRequest).getBody().asString();
+        String token = authHelper.getJWTtoken(tokenRequest).getBody().asString();
 
         /* create random user */
-        AuthUser request = manager.getAuthenticationServiceHelper().generateAuthUser();
-        Response response = manager.getAuthenticationServiceHelper().createAuthUser(request, token);
+        AuthUser request = authHelper.generateAuthUser();
+        Response response = authHelper.createAuthUser(request, token);
         AuthCreateUserResponse actual = response.as(AuthCreateUserResponse.class);
 
         assertThat(response.statusCode()).isEqualTo(201);
@@ -42,10 +51,10 @@ public class AuthTest extends TestBase{
 
         /* user login */
         AuthUser tokenRequest = new AuthUser().setUsername("user").setPassword("user");
-        String token = manager.getAuthenticationServiceHelper().getJWTtoken(tokenRequest).getBody().asString();
+        String token = authHelper.getJWTtoken(tokenRequest).getBody().asString();
 
         /* user logout */
-        Response response = manager.getAuthenticationServiceHelper().logout(token);
+        Response response = authHelper.logout(token);
 
         assertThat(response.statusCode()).isEqualTo(501);
         assertThat(response.getBody().jsonPath().getInt("code")).isEqualTo(501);
@@ -57,14 +66,14 @@ public class AuthTest extends TestBase{
 
         /* user login */
         AuthUser tokenRequest = new AuthUser().setUsername("admin").setPassword("admin");
-        String token = manager.getAuthenticationServiceHelper().getJWTtoken(tokenRequest).getBody().asString();
+        String token = authHelper.getJWTtoken(tokenRequest).getBody().asString();
 
         /* create random user */
-        AuthUser createUserReq = manager.getAuthenticationServiceHelper().generateAuthUser();
-        AuthCreateUserResponse createUserResp = manager.getAuthenticationServiceHelper().createAuthUser(createUserReq, token).as(AuthCreateUserResponse.class);
+        AuthUser createUserReq = authHelper.generateAuthUser();
+        AuthCreateUserResponse createUserResp = authHelper.createAuthUser(createUserReq, token).as(AuthCreateUserResponse.class);
 
         /* delete Auth user */
-        Response response = manager.getAuthenticationServiceHelper().deleteAuthUser(createUserResp.getId(), token);
+        Response response = authHelper.deleteAuthUser(createUserResp.getId(), token);
 
         assertThat(response.statusCode()).isEqualTo(204);
     }
@@ -74,18 +83,18 @@ public class AuthTest extends TestBase{
 
         /* user login */
         AuthUser tokenRequest = new AuthUser().setUsername("admin").setPassword("admin");
-        String token = manager.getAuthenticationServiceHelper().getJWTtoken(tokenRequest).getBody().asString();
+        String token = authHelper.getJWTtoken(tokenRequest).getBody().asString();
 
         /* create random user */
-        AuthUser createUserReq = manager.getAuthenticationServiceHelper().generateAuthUser();
-        AuthCreateUserResponse createUserResp = manager.getAuthenticationServiceHelper().createAuthUser(createUserReq, token).as(AuthCreateUserResponse.class);
+        AuthUser createUserReq = authHelper.generateAuthUser();
+        AuthCreateUserResponse createUserResp = authHelper.createAuthUser(createUserReq, token).as(AuthCreateUserResponse.class);
 
         /* login with newly created user*/
         AuthUser newTokenRequest = new AuthUser().setUsername(createUserReq.getUsername()).setPassword(createUserReq.getPassword());
-        String newToken = manager.getAuthenticationServiceHelper().getJWTtoken(newTokenRequest).getBody().asString();
+        String newToken = authHelper.getJWTtoken(newTokenRequest).getBody().asString();
 
         /* change Auth user password*/
-        Response response = manager.getAuthenticationServiceHelper().changePassword(createUserResp.getId(), "new_password", newToken);
+        Response response = authHelper.changePassword(createUserResp.getId(), "new_password", newToken);
 
         assertThat(response.statusCode()).isEqualTo(204);
     }

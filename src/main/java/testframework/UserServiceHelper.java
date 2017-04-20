@@ -1,6 +1,7 @@
 package testframework;
 
 import io.restassured.response.Response;
+import model.RolesItem;
 import model.User;
 
 import java.util.Arrays;
@@ -15,31 +16,26 @@ public class UserServiceHelper extends BaseHelper{
 
     public Response getAllUsers(String token) {
              return given()
-                        .log().all()
-                        .when()
-                        .header("Authorization", "Bearer " + token)
-                        .get(manager.getProperty("userPath"))
-                        .then()
-                        .log().all()
-                        .extract().response();
+                .when()
+                .header("Authorization", "Bearer " + token)
+                .get(manager.getProperty("userPath"))
+                .then()
+                .extract().response();
     }
 
     public Response createUser(User createUserRequest, String token) {
         return given()
-                .log().all()
                 .contentType("application/json")
                 .body(createUserRequest)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .post(manager.getProperty("userPath"))
                 .then()
-                .log().all()
                 .extract().response();
     }
 
     public Response updateUser(User user, String id, String token) {
         return given()
-                .log().all()
                 .contentType("application/json")
                 .body(user)
                 .header("Authorization", "Bearer " + token)
@@ -52,7 +48,6 @@ public class UserServiceHelper extends BaseHelper{
     public User getUserByName(String name, String token) throws Exception{
 
         User[] aUsers =  given()
-                .log().all()
                 .when()
                 .header("Authorization", "Bearer " + token)
                 .get(manager.getProperty("userPath"))
@@ -73,7 +68,6 @@ public class UserServiceHelper extends BaseHelper{
 
     public Response deleteUserById(String id, String token){
         return given()
-                .log().all()
                 .contentType("application/json")
                 .header("Authorization", "Bearer " + token)
                 .when()
@@ -84,7 +78,6 @@ public class UserServiceHelper extends BaseHelper{
 
     public Response getUserById(String id, String token){
         return given()
-                .log().all()
                 .contentType("application/json")
                 .header("Authorization", "Bearer " + token)
                 .when()
@@ -95,7 +88,6 @@ public class UserServiceHelper extends BaseHelper{
 
     public Response getUserPermissionss(String id, String token){
         return given()
-                .log().all()
                 .contentType("application/json")
                 .header("Authorization", "Bearer " + token)
                 .when()
@@ -106,7 +98,6 @@ public class UserServiceHelper extends BaseHelper{
 
     public Response addRole(String[] roleIds, String userId, String token) {
         return given()
-                .log().all()
                 .contentType("application/json")
                 .body(roleIds)
                 .header("Authorization", "Bearer " + token)
@@ -118,7 +109,6 @@ public class UserServiceHelper extends BaseHelper{
 
     public Response removeRole(String userId, String roleId, String token){
         return given()
-                .log().all()
                 .contentType("application/json")
                 .header("Authorization", "Bearer " + token)
                 .when()
@@ -131,6 +121,23 @@ public class UserServiceHelper extends BaseHelper{
 
 
 
+    public User generateUserData(String id, String userName, String roleName){
+        User user = new User()
+            .setId(id)
+            .setEmail(generateRandomString())
+            .setUsername(userName)
+            .setOrganization(generateRandomString())
+            .setFullName(generateRandomString() + " " + generateRandomString());
+
+        if (roleName.equalsIgnoreCase("admin")) {
+          user.setRoles(getRolesItems("admin"));
+        }
+        if (roleName.equalsIgnoreCase("user")) {
+          user.setRoles(getRolesItems("user"));
+        }
+        return user;
+    }
+
     public User generateUserData(String id, String userName){
         return new User()
                 .setId(id)
@@ -139,5 +146,19 @@ public class UserServiceHelper extends BaseHelper{
                 .setOrganization(generateRandomString())
                 .setFullName(generateRandomString() + " " + generateRandomString())
                 .setRoles(rolesItems);
+    }
+
+    public List<RolesItem> getRolesItems(String name) {
+        return rolesItems.stream().filter(roles -> roles.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
+    }
+
+    public String getRoleId(String name) {
+        String role = "";
+        for (RolesItem r : rolesItems) {
+            if (name.equalsIgnoreCase(r.getName())) {
+                role = r.getId();
+            }
+        }
+        return role;
     }
 }
