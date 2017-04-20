@@ -17,7 +17,7 @@ public class AuthenticationServiceHelper extends BaseHelper {
                         .contentType("application/json")
                         .body(auth)
                         .when()
-                        .post(manager.getProperty("authLogin"))
+                        .post(manager.getProperty("authPath") + "login")
                         .then()
                         .extract().response();
     }
@@ -30,11 +30,47 @@ public class AuthenticationServiceHelper extends BaseHelper {
                         .header("Authorization", "Bearer " + token)
                         .body(auth)
                         .when()
-                        .post(manager.getProperty("authCreateUserPath"))
+                        .post(manager.getProperty("authPath") + "create")
                         .then()
                         .extract().response();
     }
 
+    public Response logout(String token) {
+        return given()
+                .log().all()
+                .contentType("application/json")
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .post(manager.getProperty("authPath") + "logout")
+                .then()
+                .log().all()
+                .extract().response();
+    }
+
+    public Response deleteAuthUser(String userId, String token) {
+        return given()
+                .log().all()
+                .contentType("application/json")
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .delete(manager.getProperty("authPath") + "user/" + userId)
+                .then()
+                .log().all()
+                .extract().response();
+    }
+
+    public Response changePassword(String userId, String password, String token) {
+        return given()
+                .log().all()
+                .contentType("application/json")
+                .body(password)
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .patch(manager.getProperty("authPath") + "user/" + userId + "/password")
+                .then()
+                .log().all()
+                .extract().response();
+    }
 
 
 

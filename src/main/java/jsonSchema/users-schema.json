@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {},
+  "id": "http://example.com/example.json",
+  "items": {
+    "id": "/items",
+    "properties": {
+      "email": {
+        "id": "/items/properties/email",
+        "type": "string"
+      },
+      "full_name": {
+        "id": "/items/properties/full_name",
+        "type": "string"
+      },
+      "id": {
+        "id": "/items/properties/id",
+        "type": "string"
+      },
+      "organization": {
+        "id": "/items/properties/organization",
+        "type": "string"
+      },
+      "roles": {
+        "id": "/items/properties/roles",
+        "items": {
+          "id": "/items/properties/roles/items",
+          "properties": {
+            "id": {
+              "id": "/items/properties/roles/items/properties/id",
+              "type": "string"
+            },
+            "name": {
+              "id": "/items/properties/roles/items/properties/name",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "username": {
+        "id": "/items/properties/username",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  },
+  "type": "array"
+}

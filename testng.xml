@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite username="API TEST" parallel="classes" thread-count="1" >
-    <test username="def_tests">
-        <packages>
-            <package username="tests.*"></package>
-        </packages>
-    </test>
+<suite name="Rest API Tests"  parallel="methods" thread-count="1" >
+<test name="Rest API Testing">
+    <classes>
+        <class name="com.aginity.amp.functional.AuthTest"></class>
+        <class name="com.aginity.amp.functional.UserServiceTest"></class>
+    </classes>
+</test>
 </suite>
