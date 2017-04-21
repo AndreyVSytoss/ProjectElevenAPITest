@@ -43,6 +43,7 @@ public class UserServiceTest extends TestBase{
 
         assertThat(actual.getStatusCode()).isEqualTo(200);
         assertThat(actual.as(List.class)).extracting("full_name").contains("Admin Admin", "User User");
+
          /* validate json schema */
         assertThat(actual.getBody().asString(), matchesJsonSchema(new File(authHelper.getJsonSchemaPath() + "users-schema.json")));
     }
@@ -251,7 +252,6 @@ public class UserServiceTest extends TestBase{
         Response deleteUserResponse = userHelper.deleteUserById(expected.getId(), token);
         Response checkUser = userHelper.getUserById(expected.getId(), token);
 
-        System.out.println(checkUser.as(User.class));
       //  assertThat(deleteUserResponse.getStatusCode()).isEqualTo(200);
         assertThat(checkUser.getStatusCode()).isEqualTo(200); //not correct
     }

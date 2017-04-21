@@ -2,6 +2,7 @@ package com.aginity.amp.functional;
 
 import io.restassured.RestAssured;
 
+import io.restassured.config.LogConfig;
 import io.restassured.config.SSLConfig;
 import org.testng.annotations.BeforeClass;
 import testframework.HelperManager;

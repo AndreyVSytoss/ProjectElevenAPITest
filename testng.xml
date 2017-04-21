@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Rest API Tests"  parallel="methods" thread-count="1" >
-<test name="Rest API Testing">
+<suite name="Rest API Test"  parallel="methods" thread-count="1" >
+<test name="Functional">
     <classes>
-        <class name="com.aginity.amp.functional.AuthTest"></class>
+        <class name="com.aginity.amp.functional.AuthenticationServiceTest"></class>
         <class name="com.aginity.amp.functional.UserServiceTest"></class>
     </classes>
 </test>

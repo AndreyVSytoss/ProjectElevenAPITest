@@ -1,7 +1,6 @@
 package testframework;
 
 import io.restassured.response.Response;
-import model.AuthCreateUserResponse;
 import model.AuthUser;
 
 import static io.restassured.RestAssured.given;
@@ -22,12 +21,14 @@ public class AuthenticationServiceHelper extends BaseHelper {
 
     public Response createAuthUser(AuthUser auth, String token) {
         return given()
+                .log().all()
                 .contentType("application/json")
                 .header("Authorization", "Bearer " + token)
                 .body(auth)
                 .when()
-                .post(manager.getProperty("authPath") + "create")
+                .post(manager.getProperty("authPath") + "user")
                 .then()
+                .log().all()
                 .extract().response();
     }
 

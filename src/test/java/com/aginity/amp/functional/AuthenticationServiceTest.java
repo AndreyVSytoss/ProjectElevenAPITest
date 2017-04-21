@@ -10,7 +10,7 @@ import testframework.AuthenticationServiceHelper;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class AuthTest extends TestBase{
+public class AuthenticationServiceTest extends TestBase{
 
     private AuthenticationServiceHelper authHelper;
 
@@ -33,17 +33,17 @@ public class AuthTest extends TestBase{
     public void createAuthUser(){
 
         /* get admin token */
+
         AuthUser tokenRequest = new AuthUser().setUsername("admin").setPassword("admin");
         String token = authHelper.getJWTtoken(tokenRequest).getBody().asString();
 
         /* create random user */
         AuthUser request = authHelper.generateAuthUser();
         Response response = authHelper.createAuthUser(request, token);
-        AuthCreateUserResponse actual = response.as(AuthCreateUserResponse.class);
 
         assertThat(response.statusCode()).isEqualTo(201);
-        assertThat(actual.getUsername()).isEqualTo(request.getUsername());
-        assertThat(actual.getId()).isNotEmpty();
+        assertThat(response.as(AuthCreateUserResponse.class).getUsername()).isEqualTo(request.getUsername());
+        assertThat(response.as(AuthCreateUserResponse.class).getId()).isNotEmpty();
     }
 
     @Test
