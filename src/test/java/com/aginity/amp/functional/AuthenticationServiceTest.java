@@ -5,7 +5,7 @@ import model.AuthCreateUserResponse;
 import model.AuthUser;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import testframework.AuthenticationServiceHelper;
+import utils.AuthenticationServiceHelper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

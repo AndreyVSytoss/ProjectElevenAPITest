@@ -1,4 +1,4 @@
-package testframework;
+package utils;
 
 import java.util.Properties;
 

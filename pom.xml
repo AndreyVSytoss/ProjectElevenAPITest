@@ -8,7 +8,7 @@
     </prerequisites>
 
     <groupId>com.aginity.amp</groupId>
-    <artifactId>api-test</artifactId>
+    <artifactId>testing-rest-api</artifactId>
     <version>3.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 

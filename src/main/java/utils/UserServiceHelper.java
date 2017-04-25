@@ -1,4 +1,4 @@
-package testframework;
+package utils;
 
 import io.restassured.response.Response;
 import model.RolesItem;

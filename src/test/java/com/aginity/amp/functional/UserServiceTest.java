@@ -7,8 +7,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import io.restassured.response.Response;
-import testframework.AuthenticationServiceHelper;
-import testframework.UserServiceHelper;
+import utils.AuthenticationServiceHelper;
+import utils.UserServiceHelper;
 
 import java.io.File;
 import java.util.List;

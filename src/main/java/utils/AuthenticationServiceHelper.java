@@ -1,4 +1,4 @@
-package testframework;
+package utils;
 
 import io.restassured.response.Response;
 import model.AuthUser;
@@ -26,7 +26,7 @@ public class AuthenticationServiceHelper extends BaseHelper {
                 .header("Authorization", "Bearer " + token)
                 .body(auth)
                 .when()
-                .post(manager.getProperty("authPath") + "user")
+                .post(manager.getProperty("authPath") + "create")
                 .then()
                 .log().all()
                 .extract().response();

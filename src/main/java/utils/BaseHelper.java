@@ -1,14 +1,11 @@
-package testframework;
+package utils;
 
 import model.RolesItem;
-import model.User;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class BaseHelper {
 
